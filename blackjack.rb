@@ -16,7 +16,7 @@ class Game
   end
 
   def play
-    dealer
+    start
     player_turn
     dealer_turn
     show_hands
@@ -24,7 +24,7 @@ class Game
     rematach
   end
 
-  def dealer
+  def start
     if first_game == true
       puts "Welcome to Blackjack!"
     end
@@ -51,7 +51,7 @@ class Game
     puts "Hit or Stay, yes or no"
     answer = gets.chomp.downcase
     if answer == "yes"
-      player_hand << game_deck.draw
+      splayer_hand << game_deck.draw
       hit_phase (player)
     else
       player_final << player_hand
