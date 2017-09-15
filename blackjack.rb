@@ -24,12 +24,21 @@ class Game
     rematch
   end
 
-  def start
+def start
     if first_game == true
-      puts "Welcome to Blackjack!"
+    2.times do
+      player_hand << game_deck.draw
+      dealer_hand << game_deck.draw
     end
-    self.money -= 10
+    puts "Welcome to Blackjack"
+    puts "Player hand is:"
+    puts player_hand
+    puts "Dealer hand is:"
+    puts dealer_hand
+    else
+    self.money -=10
     puts money
+    puts "Welcome back jerk"
     2.times do
       player_hand << game_deck.draw
       dealer_hand << game_deck.draw
@@ -38,7 +47,24 @@ class Game
     puts player_hand
     puts "Dealer hand is:"
     puts dealer_hand
-  end
+end
+end
+
+  # def start
+  #   if first_game == true
+  #     puts "Welcome to Blackjack!"
+  #   end
+  #   self.money -= 10
+  #   puts money
+  #   2.times do
+  #     player_hand << game_deck.draw
+  #     dealer_hand << game_deck.draw
+  #   end
+  #   puts "Player hand is:"
+  #   puts player_hand
+  #   puts "Dealer hand is:"
+  #   puts dealer_hand
+  # end
 
   #could do player_hand[0] + player_hand[1]
   def player_turn
@@ -51,7 +77,7 @@ class Game
     puts "Hit or Stay, yes or no"
     answer = gets.chomp.downcase
     if answer == "yes"
-      splayer_hand << game_deck.draw
+      player_hand << game_deck.draw
       hit_phase (player)
     else
       player_final << player_hand
