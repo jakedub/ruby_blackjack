@@ -24,47 +24,48 @@ class Game
     rematch
   end
 
-def start
-    if first_game == true
-    2.times do
-      player_hand << game_deck.draw
-      dealer_hand << game_deck.draw
-    end
-    puts "Welcome to Blackjack"
-    puts "Player hand is:"
-    puts player_hand
-    puts "Dealer hand is:"
-    puts dealer_hand
-    else
-    self.money -=10
-    puts money
-    puts "Welcome back jerk"
-    2.times do
-      player_hand << game_deck.draw
-      dealer_hand << game_deck.draw
-    end
-    puts "Player hand is:"
-    puts player_hand
-    puts "Dealer hand is:"
-    puts dealer_hand
-end
-end
+# def start
+#     if self.first_game == true
+#     2.times do
+#       player_hand << game_deck.draw
+#       dealer_hand << game_deck.draw
+#     end
+#     self.money -=10
+#     puts "Welcome to Blackjack"
+#     puts "Player hand is:"
+#     puts player_hand
+#     puts "Dealer hand is:"
+#     puts dealer_hand
+#     else
+#     self.money -=10
+#     puts money
+#     puts "Welcome back jerk"
+#     2.times do
+#       player_hand << game_deck.draw
+#       dealer_hand << game_deck.draw
+#     end
+#     puts "Player hand is:"
+#     puts player_hand
+#     puts "Dealer hand is:"
+#     puts dealer_hand
+# end
+# end
 
-  # def start
-  #   if first_game == true
-  #     puts "Welcome to Blackjack!"
-  #   end
-  #   self.money -= 10
-  #   puts money
-  #   2.times do
-  #     player_hand << game_deck.draw
-  #     dealer_hand << game_deck.draw
-  #   end
-  #   puts "Player hand is:"
-  #   puts player_hand
-  #   puts "Dealer hand is:"
-  #   puts dealer_hand
-  # end
+  def start
+    if first_game == true
+      puts "Welcome to Blackjack!"
+    end
+    self.money -= 10
+    puts money
+    2.times do
+      player_hand << game_deck.draw
+      dealer_hand << game_deck.draw
+    end
+    puts "Player hand is:"
+    puts player_hand
+    puts "Dealer hand is:"
+    puts dealer_hand
+  end
 
   #could do player_hand[0] + player_hand[1]
   def player_turn
@@ -74,11 +75,12 @@ end
       puts card
     end
 
-    puts "Hit or Stay, yes or no"
+    puts "Hit or Stay"
     answer = gets.chomp.downcase
-    if answer == "yes"
+    if answer == "hit"
       player_hand << game_deck.draw
-      hit_phase (player)
+      hit_phase
+      puts hand_value
     else
       player_final << player_hand
     end
@@ -141,7 +143,7 @@ end
     puts "Do you want to play again? Y/N"
     answer = gets.chomp.downcase
     if answer == "y"
-      first_game == false
+      self.first_game == false
       self.player_hand = []
       self.dealer_hand = []
       start
