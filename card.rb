@@ -24,6 +24,7 @@ class Card
     else
       self.value = face.to_i
     end
+  end
 
     #would return true/false
     def >(other)
@@ -43,3 +44,4 @@ class Card
       "A #{face} of #{suit}."
     end
 end
+puts "present"

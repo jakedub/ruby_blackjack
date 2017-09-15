@@ -3,77 +3,124 @@ require_relative 'deck'
 require_relative 'card'
 
 class Game
-  attr_accessor :player_hand, :dealer_hand, :game_deck, :money, :first_game, :hit_phase
+  attr_accessor :player_hand, :dealer_hand, :game_deck, :money, :first_game, :hit_phase, :player_final, :dealer_final
 
   def initialize
     self.player_hand = []
     self.dealer_hand = []
-    game_deck = Deck.new
-    money = 100
+    self.game_deck = Deck.new
+    self.money = 100
+    self.first_game = true
+    self.player_final = []
+    self.dealer_final = []
   end
 
   def play
+    dealer
+    player_turn
+    dealer_turn
+    show_hands
+    winner
+    rematach
+  end
 
-    def dealer
-      2.times do
-        player_hand << game_deck.draw
-        dealer_hand << game_deck.draw
-        puts player_hand
-        puts dealer_hand
-      end
+  def dealer
+    if first_game == true
+      puts "Welcome to Blackjack!"
     end
-    #could do player_hand[0] + player_hand[1]
-    def player_hand
-      hand_value = player_hand.reduce(:+)
-      puts "You have #{hand_value}"
-      player_hand.each do |card|
-        puts card
-      end
-
-      puts "Hit(y) or Stay(n)"
-      answer = gets.chomp.downcase
-      if answer == "y"
-        player_hand << game_deck.draw
-        hit_phase (player)
-      end
-
-      def dealer_hand
-        puts "Dealer's Turn. Showing #{dealer_hand[0]}"
-        dealer_value = dealer_hand.reduce(:+)
-        if dealer_value < 16
-          hit_phase (dealer)
-        end
-      end
-
-      def hit_phase (who)
-        player_hand << game_deck.draw
-        who_turn
-
-        dealer_hand << game_deck.draw
-        who_turn
-      end
-
-      def show_hands
-        #player_hand "has these cards with this total" dealer_hand "has these cards with this total"
-      end
-
-      def winner
-        #output winner, win get $10, lose lose $10
-        if win
-          money += 10
-        else loss
-          money -= 10
-          puts "You now have #{money} dollars"
-        end
-
-        def rematach
-        end
-
-      end
+    self.money -= 10
+    puts money
+    2.times do
+      player_hand << game_deck.draw
+      dealer_hand << game_deck.draw
     end
+    puts "Player hand is:"
+    puts player_hand
+    puts "Dealer hand is:"
+    puts dealer_hand
+  end
+
+  #could do player_hand[0] + player_hand[1]
+  def player_turn
+    hand_value = player_hand.reduce(:+)
+    puts "You have #{hand_value}"
+    player_hand.each do |card|
+      puts card
+    end
+
+    puts "Hit or Stay, yes or no"
+    answer = gets.chomp.downcase
+    if answer == "yes"
+      player_hand << game_deck.draw
+      hit_phase (player)
+    else
+      player_final << player_hand
+    end
+    puts hand_value
+  end
+
+#reveals first card in hand but also total value in the puts
+  def dealer_turn
+    puts "Dealer's Turn. Showing #{dealer_hand[0]}"
+    dealer_value = dealer_hand.reduce(:+)
+    if dealer_value < 16
+      hit_phase (dealer)
+    else
+      dealer_final << dealer_hand
+    end
+    puts dealer_value
+  end
+
+  def hit_phase(who)
+    who_turn_hand << game_deck.draw
+    who_turn
+  end
+
+  # def final_player
+  #   player_final << player_hand
+  #   player_final_value = player_hand.reduce(:+)
+  #   puts player_final_value
+  # end
+  #
+  # def final_dealer
+  #   dealer_final_value = dealer_hand.reduce(:+)
+  #   puts dealer_final_value
+  # end
+
+  def show_hands
+    player_final_value = player_hand.reduce(:+)
+    dealer_final_value = dealer_hand.reduce(:+)
+    puts "Player has a total of #{player_final_value}. Dealer has a total of #{dealer_final_value}"
+    if player_final_value > dealer_final_value
+      puts "You win, congrats on beating a program built by a novice"
+    else
+      puts "I have bested you"
+    end
+  end
+
+  def winner
+    win = player_turn > dealer_turn
+    loss = player_hand < dealer_hand
+    if win
+      money += 10
+    else loss
+      money -= 10
+      puts "You now have #{money} dollars"
+    end
+  end
+
+  def rematach
+    puts "Do you want to play again? Y/N"
+    answer = gets.chomp.downcase
+    if answer == "y"
+      game.first_game = false
+      dealer
+    end
+    puts "Fine I don't like you anyway"
+  end
+
+end
 
 
 game = Game.new
-game.play
-
 binding.pry
