@@ -21,7 +21,7 @@ class Game
     dealer_turn
     show_hands
     winner
-    rematach
+    rematch
   end
 
   def start
@@ -92,31 +92,36 @@ class Game
     dealer_final_value = dealer_hand.reduce(:+)
     puts "Player has a total of #{player_final_value}. Dealer has a total of #{dealer_final_value}"
     if player_final_value > dealer_final_value
-      puts "You win, congrats on beating a program built by a novice"
+      puts "You win, congrats on beating a program built by a novice."
     else
-      puts "I have bested you"
+      puts "I have bested you."
     end
   end
 
   def winner
-    win = player_turn > dealer_turn
-    loss = player_hand < dealer_hand
+    player_final_value = player_hand.reduce(:+)
+    dealer_final_value = dealer_hand.reduce(:+)
+    win = player_final_value > dealer_final_value
     if win
-      money += 10
-    else loss
-      money -= 10
+      self.money += 10
+      puts "Here's the #{money} dollars"
+    else
+      self.money -= 10
       puts "You now have #{money} dollars"
     end
   end
 
-  def rematach
+  def rematch
     puts "Do you want to play again? Y/N"
     answer = gets.chomp.downcase
     if answer == "y"
-      game.first_game = false
-      dealer
+      first_game == false
+      self.player_hand = []
+      self.dealer_hand = []
+      start
+    else
+      puts "Fine I don't like you anyway"
     end
-    puts "Fine I don't like you anyway"
   end
 
 end
