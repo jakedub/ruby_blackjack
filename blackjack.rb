@@ -10,7 +10,6 @@ class Game
     self.dealer_hand = []
     self.game_deck = Deck.new
     self.money = 100
-    self.first_game = true
     self.player_final = []
     self.dealer_final = []
   end
@@ -22,6 +21,8 @@ class Game
     show_hands
     winner
     rematch
+    d_hit_phase
+    additional
   end
 
 # def start
@@ -29,7 +30,7 @@ class Game
 #     2.times do
 #       player_hand << game_deck.draw
 #       dealer_hand << game_deck.draw
-#     end
+#       end
 #     self.money -=10
 #     puts "Welcome to Blackjack"
 #     puts "Player hand is:"
@@ -67,42 +68,63 @@ class Game
     puts dealer_hand
   end
 
+  def additional
+    puts "Welcome back nerd!"
+    self.money -= 10
+    puts money
+    2.times do
+      player_hand << game_deck.draw
+      dealer_hand << game_deck.draw
+    end
+    puts "Player hand is:"
+    puts player_hand
+    puts "Dealer hand is:"
+    puts dealer_hand
+  end
+
+
   #could do player_hand[0] + player_hand[1]
   def player_turn
-    hand_value = player_hand.reduce(:+)
-    puts "You have #{hand_value}"
     player_hand.each do |card|
       puts card
     end
+    hand_value = player_hand.reduce(:+)
+    # hand_value = player_hand.reduce(0){|sum, num| sum + num.value}
+    puts "You have #{hand_value}"
 
     puts "Hit or Stay"
     answer = gets.chomp.downcase
-    if answer == "hit"
-      player_hand << game_deck.draw
-      hit_phase
-      puts hand_value
-    else
-      player_final << player_hand
-    end
-    puts hand_value
+      if answer == "hit"
+        hit_phase
+        # puts hand_value
+      end
+    # puts hand_value
+  end
+
+  def hit_phase
+    player_hand << game_deck.draw
+    player_turn
   end
 
 #reveals first card in hand but also total value in the puts
   def dealer_turn
     puts "Dealer's Turn. Showing #{dealer_hand[0]}"
-    dealer_value = dealer_hand.reduce(:+)
+    dealer_value = dealer_hand.reduce(0) {|sum, num| sum + num.value}
     if dealer_value < 16
-      hit_phase (dealer)
-    else
-      dealer_final << dealer_hand
+      d_hit_phase
     end
     puts dealer_value
   end
 
-  def hit_phase(who)
-    who_turn_hand << game_deck.draw
-    who_turn
+  def d_hit_phase
+    dealer_hand << game_deck.draw
+    dealer_turn
   end
+
+  # def hit_phase(who)
+  #   who_turn_hand << game_deck.draw
+  #   who_turn
+  # end
 
   # def final_player
   #   player_final << player_hand
@@ -143,10 +165,9 @@ class Game
     puts "Do you want to play again? Y/N"
     answer = gets.chomp.downcase
     if answer == "y"
-      self.first_game == false
       self.player_hand = []
       self.dealer_hand = []
-      start
+      additional
     else
       puts "Fine I don't like you anyway"
     end
