@@ -3,15 +3,15 @@ require_relative 'deck'
 require_relative 'card'
 
 class Game
-  attr_accessor :player_hand, :dealer_hand, :game_deck, :money, :first_game, :hit_phase, :player_final, :dealer_final
+  attr_accessor :player_hand, :dealer_hand, :game_deck, :money, :first_game, :hit_phase, :player_value, :dealer_value
 
   def initialize
     self.player_hand = []
     self.dealer_hand = []
     self.game_deck = Deck.new
     self.money = 100
-    self.player_final = []
-    self.dealer_final = []
+    self.player_value = 0
+    self.dealer_value= 0
   end
 
   def play
@@ -88,8 +88,8 @@ class Game
     player_hand.each do |card|
       puts card
     end
-    hand_value = player_hand.reduce(:+)
-    # hand_value = player_hand.reduce(0){|sum, num| sum + num.value}
+    # hand_value = player_hand.reduce(:+)
+    hand_value = player_hand.reduce(0){|sum, num| sum + num.value}
     puts "You have #{hand_value}"
 
     puts "Hit or Stay"
